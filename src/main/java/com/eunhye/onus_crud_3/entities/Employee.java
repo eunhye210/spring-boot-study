@@ -5,19 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(name = "employees")
-public class Employee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
+public class Employee extends AbstractEntity {
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
