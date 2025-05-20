@@ -14,7 +14,11 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @SuperBuilder
 @Table(name = "employees")
-public class Employee extends AbstractEntity {
+public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 

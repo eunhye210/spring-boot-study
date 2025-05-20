@@ -19,12 +19,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeResponseDTO createEmployee(EmployeeDTO employeeDTO) {
-        return null;
+        if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+        // convert DTO to entity
+        Employee employee = EmployeeMapper.mapToEmployee(employeeDTO);
+
+        // save entity to database
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        return EmployeeMapper.mapToEmployeeResponseDTO(savedEmployee);
     }
 
     @Override
     public EmployeeResponseDTO getEmployeeById(String employeeId) {
-        return null;
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return EmployeeMapper.mapToEmployeeResponseDTO(employee);
     }
 
     @Override
