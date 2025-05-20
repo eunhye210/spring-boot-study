@@ -44,7 +44,7 @@ public class OpenApiConfig {
                 .description("This is a sample API for managing employees.")
                 .termsOfService("http://swagger.io/terms/")
                 .license(mitLicense);
-        
+
         return new OpenAPI().info(info).servers(List.of(devServer, prodServer));
     }
 }
