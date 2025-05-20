@@ -50,11 +50,28 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void deleteEmployee(String employeeId) {
-
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        employeeRepository.delete(employee);
     }
 
     @Override
     public EmployeeResponseDTO updateEmployee(String employeeId, EmployeeDTO employeeDTO) {
-        return null;
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        if (!employee.getEmail().equals(employeeDTO.getEmail()) &&
+                employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // update entity
+        employee.setFirstName(employeeDTO.getFirstName());
+        employee.setLastName(employeeDTO.getLastName());
+        employee.setEmail(employeeDTO.getEmail());
+        employee.setDepartment(employeeDTO.getDepartment());
+
+        Employee upatedEmployee = employeeRepository.save(employee);
+        return EmployeeMapper.mapToEmployeeResponseDTO(upatedEmployee);
     }
 }
