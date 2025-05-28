@@ -5,6 +5,8 @@ import com.eunhye.onus_crud_3.dtos.EmployeeResponseDTO;
 import com.eunhye.onus_crud_3.dtos.PageResponseDTO;
 import com.eunhye.onus_crud_3.services.EmployeeService;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +24,10 @@ public class EmployeeController {
         return ResponseEntity.ok(employees);
     }
 
+    @Cacheable(
+            value = "employees",
+            key = "T(java.util.Objects).hash(#pageNo, #pageSize, #sortBy, #sortDirection, #searchKeyword)"
+    )
     @GetMapping("/pagination")
     public ResponseEntity<PageResponseDTO> getAllEmployeesWithPagination(
             @RequestParam(defaultValue = "1") int pageNo,
@@ -48,6 +54,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.getEmployeeById(employeeId));
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     @PostMapping
     public ResponseEntity<EmployeeResponseDTO> createEmployee(
             @RequestBody EmployeeDTO employeeDTO
@@ -55,6 +62,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.createEmployee(employeeDTO));
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     @DeleteMapping("/{employeeId}")
     public ResponseEntity<Void> deleteEmployee(
             @PathVariable String employeeId
@@ -63,6 +71,7 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
+    @CacheEvict(value = "employees", allEntries = true)
     @PutMapping("/{employeeId}")
     public ResponseEntity<EmployeeResponseDTO> updateEmployee(
             @PathVariable String employeeId,
