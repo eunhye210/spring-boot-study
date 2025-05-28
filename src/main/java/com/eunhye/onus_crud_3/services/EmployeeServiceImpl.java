@@ -67,7 +67,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
+        // 단순 pagination 적용
 //        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+
+        // searchKeyword 추가 적용
         Page<Employee> employeePage;
         if (searchKeyword == null || searchKeyword.trim().isEmpty()) {
             employeePage = employeeRepository.findAll(pageable);
