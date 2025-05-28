@@ -11,7 +11,7 @@ public interface EmployeeService {
     EmployeeResponseDTO createEmployee(EmployeeDTO employeeDTO);
     EmployeeResponseDTO getEmployeeById(String employeeId);
     List<EmployeeResponseDTO> getAllEmployees();
-    PageResponseDTO getAllEmployeesWithPagination(int pageNo, int pageSize, String sortBy, String sortDirection);
+    PageResponseDTO getAllEmployeesWithPagination(int pageNo, int pageSize, String sortBy, String sortDirection, String searchKeyword);
     void deleteEmployee(String employeeId);
     EmployeeResponseDTO updateEmployee(String employeeId, EmployeeDTO employeeDTO);
 }

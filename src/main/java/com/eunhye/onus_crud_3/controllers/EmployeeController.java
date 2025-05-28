@@ -26,10 +26,17 @@ public class EmployeeController {
     public ResponseEntity<PageResponseDTO> getAllEmployeesWithPagination(
             @RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") int pageSize,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDirection
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDirection,
+            @RequestParam(required = false) String searchKeyword
     ) {
-        PageResponseDTO res = employeeService.getAllEmployeesWithPagination(pageNo, pageSize, sortBy, sortDirection);
+        PageResponseDTO res = employeeService.getAllEmployeesWithPagination(
+                pageNo,
+                pageSize,
+                sortBy,
+                sortDirection,
+                searchKeyword
+        );
         return ResponseEntity.ok(res);
     }
 

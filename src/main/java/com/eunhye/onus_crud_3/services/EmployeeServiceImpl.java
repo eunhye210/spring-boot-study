@@ -58,7 +58,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             int pageNo,
             int pageSize,
             String sortBy,
-            String sortDirection
+            String sortDirection,
+            String searchKeyword
     ) {
         Sort sort =  sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
                 ? Sort.by(sortBy).ascending()
@@ -66,7 +67,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
-        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+//        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+        Page<Employee> employeePage;
+        if (searchKeyword == null || searchKeyword.trim().isEmpty()) {
+            employeePage = employeeRepository.findAll(pageable);
+        } else {
+            employeePage = employeeRepository.findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                    searchKeyword,
+                    searchKeyword,
+                    searchKeyword,
+                    pageable
+            );
+        }
 
         List<EmployeeResponseDTO> employeeResponseDTOS = employeePage.getContent()
                 .stream()
