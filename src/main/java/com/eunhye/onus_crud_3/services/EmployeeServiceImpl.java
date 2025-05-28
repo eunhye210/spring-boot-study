@@ -2,10 +2,15 @@ package com.eunhye.onus_crud_3.services;
 
 import com.eunhye.onus_crud_3.dtos.EmployeeDTO;
 import com.eunhye.onus_crud_3.dtos.EmployeeResponseDTO;
+import com.eunhye.onus_crud_3.dtos.PageResponseDTO;
 import com.eunhye.onus_crud_3.entities.Employee;
 import com.eunhye.onus_crud_3.mapper.EmployeeMapper;
 import com.eunhye.onus_crud_3.repositories.EmployeeRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,6 +51,37 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .stream()
                 .map(EmployeeMapper::mapToEmployeeResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public PageResponseDTO getAllEmployeesWithPagination(
+            int pageNo,
+            int pageSize,
+            String sortBy,
+            String sortDirection
+    ) {
+        Sort sort =  sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
+
+        Page<Employee> employeePage = employeeRepository.findAll(pageable);
+
+        List<EmployeeResponseDTO> employeeResponseDTOS = employeePage.getContent()
+                .stream()
+                .map(EmployeeMapper::mapToEmployeeResponseDTO)
+                .collect(Collectors.toList());
+
+        return PageResponseDTO.builder()
+                .body(employeeResponseDTOS)
+                .pageNo(pageNo)
+                .pageSize(pageSize)
+                .totalElements(employeePage.getTotalElements())
+                .totalPages(employeePage.getTotalPages())
+                .hasNext(employeePage.hasNext())
+                .hasPrevious(employeePage.hasPrevious())
+                .build();
     }
 
     @Override
