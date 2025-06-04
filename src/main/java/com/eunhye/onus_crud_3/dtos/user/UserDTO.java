@@ -13,7 +13,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDTO {
-    private String id;
 
     @NotEmpty(message = "User name should not be empty")
     private String userName;

@@ -4,6 +4,7 @@ import com.eunhye.onus_crud_3.dtos.ApiResponseDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.services.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ApiResponseDTO<UserResponseDTO>> createUser(
-            @RequestBody UserDTO userDTO
+            @Valid @RequestBody UserDTO userDTO
     ) {
         UserResponseDTO savedUser = userService.createUser(userDTO);
         ApiResponseDTO<UserResponseDTO> response = ApiResponseDTO.<UserResponseDTO>builder()
