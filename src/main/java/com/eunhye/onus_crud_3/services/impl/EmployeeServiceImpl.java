@@ -1,11 +1,12 @@
-package com.eunhye.onus_crud_3.services;
+package com.eunhye.onus_crud_3.services.impl;
 
-import com.eunhye.onus_crud_3.dtos.EmployeeDTO;
-import com.eunhye.onus_crud_3.dtos.EmployeeResponseDTO;
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeDTO;
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeResponseDTO;
 import com.eunhye.onus_crud_3.dtos.PageResponseDTO;
 import com.eunhye.onus_crud_3.entities.Employee;
 import com.eunhye.onus_crud_3.mapper.EmployeeMapper;
 import com.eunhye.onus_crud_3.repositories.EmployeeRepository;
+import com.eunhye.onus_crud_3.services.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

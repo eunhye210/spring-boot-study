@@ -1,8 +1,8 @@
 package com.eunhye.onus_crud_3.mapper;
 
-import com.eunhye.onus_crud_3.dtos.UserResponseDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.entities.User;
-import com.eunhye.onus_crud_3.dtos.UserDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserDTO;
 
 public class UserMapper {
     public static User mapToUser(UserDTO userDTO) {

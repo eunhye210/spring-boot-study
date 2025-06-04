@@ -1,4 +1,4 @@
-package com.eunhye.onus_crud_3.dtos;
+package com.eunhye.onus_crud_3.dtos.employee;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

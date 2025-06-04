@@ -1,10 +1,11 @@
-package com.eunhye.onus_crud_3.services;
+package com.eunhye.onus_crud_3.services.impl;
 
-import com.eunhye.onus_crud_3.dtos.UserDTO;
-import com.eunhye.onus_crud_3.dtos.UserResponseDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.entities.User;
 import com.eunhye.onus_crud_3.mapper.UserMapper;
 import com.eunhye.onus_crud_3.repositories.UserRepository;
+import com.eunhye.onus_crud_3.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

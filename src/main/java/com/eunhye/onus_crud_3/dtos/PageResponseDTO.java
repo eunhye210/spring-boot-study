@@ -1,5 +1,6 @@
 package com.eunhye.onus_crud_3.dtos;
 
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeResponseDTO;
 import lombok.*;
 
 import java.util.List;

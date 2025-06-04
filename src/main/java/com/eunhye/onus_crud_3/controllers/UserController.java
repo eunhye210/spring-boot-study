@@ -1,9 +1,11 @@
 package com.eunhye.onus_crud_3.controllers;
 
-import com.eunhye.onus_crud_3.dtos.UserDTO;
-import com.eunhye.onus_crud_3.dtos.UserResponseDTO;
+import com.eunhye.onus_crud_3.dtos.ApiResponseDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,9 +19,16 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(
+    public ResponseEntity<ApiResponseDTO<UserResponseDTO>> createUser(
             @RequestBody UserDTO userDTO
     ) {
-        return ResponseEntity.ok(userService.createUser(userDTO));
+        UserResponseDTO savedUser = userService.createUser(userDTO);
+        ApiResponseDTO<UserResponseDTO> response = ApiResponseDTO.<UserResponseDTO>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("User created successfully")
+                .data(savedUser)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

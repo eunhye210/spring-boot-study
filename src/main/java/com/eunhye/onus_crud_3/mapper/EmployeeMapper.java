@@ -1,8 +1,8 @@
 package com.eunhye.onus_crud_3.mapper;
 
-import com.eunhye.onus_crud_3.dtos.EmployeeResponseDTO;
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeResponseDTO;
 import com.eunhye.onus_crud_3.entities.Employee;
-import com.eunhye.onus_crud_3.dtos.EmployeeDTO;
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeDTO;
 
 public class EmployeeMapper {
     public static Employee mapToEmployee(EmployeeDTO employeeDTO) {

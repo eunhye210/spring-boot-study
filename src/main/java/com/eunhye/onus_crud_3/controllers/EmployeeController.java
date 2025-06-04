@@ -1,7 +1,7 @@
 package com.eunhye.onus_crud_3.controllers;
 
-import com.eunhye.onus_crud_3.dtos.EmployeeDTO;
-import com.eunhye.onus_crud_3.dtos.EmployeeResponseDTO;
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeDTO;
+import com.eunhye.onus_crud_3.dtos.employee.EmployeeResponseDTO;
 import com.eunhye.onus_crud_3.dtos.PageResponseDTO;
 import com.eunhye.onus_crud_3.services.EmployeeService;
 import lombok.AllArgsConstructor;
