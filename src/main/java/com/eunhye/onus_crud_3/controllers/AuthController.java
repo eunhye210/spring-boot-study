@@ -59,7 +59,16 @@ public class AuthController {
     public ResponseEntity<ApiResponseDTO<Boolean>> checkAuthenticationCode(
             @RequestBody EmailVerifyDTO emailVerifyDTO
     ) {
-        authService.verifyEmailCode(emailVerifyDTO);
+        boolean isValid = authService.verifyEmailCode(emailVerifyDTO);
+
+        if (!isValid) {
+            ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
+                    .statusCode(HttpStatus.BAD_REQUEST.value())
+                    .message("인증 코드가 유효하지 않습니다.")
+                    .data(false)
+                    .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
 
         ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
                 .statusCode(HttpStatus.OK.value())
