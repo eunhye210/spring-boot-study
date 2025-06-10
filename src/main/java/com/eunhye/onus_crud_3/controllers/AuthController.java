@@ -1,6 +1,8 @@
 package com.eunhye.onus_crud_3.controllers;
 
 import com.eunhye.onus_crud_3.dtos.ApiResponseDTO;
+import com.eunhye.onus_crud_3.dtos.email.EmailRequestDTO;
+import com.eunhye.onus_crud_3.dtos.email.EmailVerifyDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.services.EmailService;
@@ -9,10 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -37,5 +36,19 @@ public class AuthController {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/authentication")
+    public boolean sendAuthenticationEmail(
+            @RequestBody EmailRequestDTO emailRequestDTO
+    ) {
+        return true;
+    }
+
+    @GetMapping("/authentication-confirm")
+    public boolean checkAuthenticationCode(
+            @RequestBody EmailVerifyDTO emailVerifyDTO
+    ) {
+        return true;
     }
 }

@@ -62,4 +62,26 @@ public class EmailServiceImpl implements EmailService {
         });
 
     }
+
+    @Override
+    public void sendVerificationCodeEmail(String to, String code) {
+        executor.execute(() -> {
+            try {
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+                Context context = new Context();
+                context.setVariable("code", code);
+                String htmlContent = templateEngine.process("verification-email", context);
+
+                helper.setTo(to);
+                helper.setSubject("이메일 인증 코드");
+                helper.setText(htmlContent, true);
+
+                mailSender.send(message);
+            } catch (Exception e) {
+                log.error("이메일 인증 코드 전송 실패: {}", e.getMessage(), e);
+            }
+        });
+    }
 }
