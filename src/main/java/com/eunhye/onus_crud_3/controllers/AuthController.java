@@ -55,10 +55,18 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/authentication-confirm")
-    public boolean checkAuthenticationCode(
+    @GetMapping("/verify/email")
+    public ResponseEntity<ApiResponseDTO<Boolean>> checkAuthenticationCode(
             @RequestBody EmailVerifyDTO emailVerifyDTO
     ) {
-        return true;
+        authService.verifyEmailCode(emailVerifyDTO);
+
+        ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("인증 코드 확인 성공")
+                .data(true)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }
