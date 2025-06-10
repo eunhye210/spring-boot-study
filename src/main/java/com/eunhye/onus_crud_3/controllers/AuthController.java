@@ -5,6 +5,7 @@ import com.eunhye.onus_crud_3.dtos.email.EmailRequestDTO;
 import com.eunhye.onus_crud_3.dtos.email.EmailVerifyDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
+import com.eunhye.onus_crud_3.services.AuthService;
 import com.eunhye.onus_crud_3.services.EmailService;
 import com.eunhye.onus_crud_3.services.UserService;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private UserService userService;
     private EmailService emailService;
+    private AuthService authService;
 
     @PostMapping
     public ResponseEntity<ApiResponseDTO<UserResponseDTO>> createUser(
@@ -39,10 +41,18 @@ public class AuthController {
     }
 
     @PostMapping("/authentication")
-    public boolean sendAuthenticationEmail(
+    public ResponseEntity<ApiResponseDTO<Boolean>> sendAuthenticationEmail(
             @RequestBody EmailRequestDTO emailRequestDTO
     ) {
-        return true;
+        authService.sendVerificationCode(emailRequestDTO);
+
+        ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("이메일 전송 성공")
+                .data(true)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/authentication-confirm")

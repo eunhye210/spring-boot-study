@@ -24,8 +24,9 @@ public class AuthServiceIml implements AuthService {
     public String sendVerificationCode(EmailRequestDTO emailRequestDTO) {
         // 6자리 랜덤 코드 생성
         String code = String.format("%06d", new Random().nextInt(1000000));
-        emailService.se
-        return null;
+        emailService.sendVerificationCodeEmail(emailRequestDTO.getEmail(), code);
+        // Redis에 저장
+        return code;
     }
 
     @Override
