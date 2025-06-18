@@ -1,6 +1,6 @@
 package com.eunhye.onus_crud_3.services.impl;
 
-import com.eunhye.onus_crud_3.dtos.user.UserDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserRequestDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.entities.User;
 import com.eunhye.onus_crud_3.mapper.UserMapper;
@@ -11,18 +11,20 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
+//@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Override
-    public UserResponseDTO createUser(UserDTO userDTO) {
-        if (userRepository.existsByEmail(userDTO.getEmail())) {
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+        if (userRepository.existsByEmail(userRequestDTO.getEmail())) {
             throw new RuntimeException("Email already exists");
         }
 
-        User user = UserMapper.mapToUser(userDTO);
+        User user = userMapper.mapToUser(userRequestDTO);
         User savedUser = userRepository.save(user);
 
-        return UserMapper.mapToUserResponseDTO(savedUser);
+        return userMapper.mapToUserResponseDTO(savedUser);
     }
 }

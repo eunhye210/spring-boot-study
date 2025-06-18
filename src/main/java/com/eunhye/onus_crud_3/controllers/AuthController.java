@@ -3,7 +3,8 @@ package com.eunhye.onus_crud_3.controllers;
 import com.eunhye.onus_crud_3.dtos.ApiResponseDTO;
 import com.eunhye.onus_crud_3.dtos.email.EmailRequestDTO;
 import com.eunhye.onus_crud_3.dtos.email.EmailVerifyDTO;
-import com.eunhye.onus_crud_3.dtos.user.UserDTO;
+import com.eunhye.onus_crud_3.dtos.login.AuthRequestDTO;
+import com.eunhye.onus_crud_3.dtos.user.UserRequestDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
 import com.eunhye.onus_crud_3.services.AuthService;
 import com.eunhye.onus_crud_3.services.EmailService;
@@ -24,9 +25,9 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<ApiResponseDTO<UserResponseDTO>> createUser(
-            @Valid @RequestBody UserDTO userDTO
+            @Valid @RequestBody UserRequestDTO userRequestDTO
     ) {
-        UserResponseDTO savedUser = userService.createUser(userDTO);
+        UserResponseDTO savedUser = userService.createUser(userRequestDTO);
 
         // 웰컴 메일 전송
         emailService.sendEmail(savedUser.getEmail(), savedUser.getUserName());
@@ -73,6 +74,18 @@ public class AuthController {
         ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("인증 코드 확인 성공")
+                .data(true)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponseDTO<Boolean>> signIn(@RequestBody AuthRequestDTO authRequestDTO) {
+
+        ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("로그인 성공")
                 .data(true)
                 .build();
 
