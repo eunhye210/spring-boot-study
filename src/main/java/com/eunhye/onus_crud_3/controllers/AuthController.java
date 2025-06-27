@@ -4,15 +4,23 @@ import com.eunhye.onus_crud_3.dtos.ApiResponseDTO;
 import com.eunhye.onus_crud_3.dtos.email.EmailRequestDTO;
 import com.eunhye.onus_crud_3.dtos.email.EmailVerifyDTO;
 import com.eunhye.onus_crud_3.dtos.login.AuthRequestDTO;
+import com.eunhye.onus_crud_3.dtos.login.AuthResponseDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserRequestDTO;
 import com.eunhye.onus_crud_3.dtos.user.UserResponseDTO;
+import com.eunhye.onus_crud_3.entities.User;
 import com.eunhye.onus_crud_3.services.AuthService;
 import com.eunhye.onus_crud_3.services.EmailService;
+import com.eunhye.onus_crud_3.services.JwtService;
 import com.eunhye.onus_crud_3.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +30,8 @@ public class AuthController {
     private UserService userService;
     private EmailService emailService;
     private AuthService authService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @PostMapping
     public ResponseEntity<ApiResponseDTO<UserResponseDTO>> createUser(
@@ -80,15 +90,35 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/login")
-    public ResponseEntity<ApiResponseDTO<Boolean>> signIn(@RequestBody AuthRequestDTO authRequestDTO) {
+    public ResponseEntity<ApiResponseDTO<AuthResponseDTO>> signIn(@RequestBody AuthRequestDTO authRequestDTO) {
 
-        ApiResponseDTO<Boolean> response = ApiResponseDTO.<Boolean>builder()
-                .statusCode(HttpStatus.OK.value())
-                .message("로그인 성공")
-                .data(true)
-                .build();
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authRequestDTO.getEmail(), authRequestDTO.getPassword())
+        );
 
-        return ResponseEntity.ok(response);
+        if (authentication.isAuthenticated()) {
+            User user = userService.findByEmail(authRequestDTO.getEmail())
+                    .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+            String accessToken = jwtService.generateToken(user.getEmail());
+            String refreshToken = jwtService.generateToken(user.getEmail());
+
+            AuthResponseDTO authResponseDTO = AuthResponseDTO.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+
+            ApiResponseDTO<AuthResponseDTO> response = ApiResponseDTO.<AuthResponseDTO>builder()
+                    .statusCode(HttpStatus.OK.value())
+                    .message("로그인 성공")
+                    .data(authResponseDTO)
+                    .build();
+
+            return ResponseEntity.ok(response);
+
+        } else {
+            throw new UsernameNotFoundException("User not found");
+        }
     }
 }
